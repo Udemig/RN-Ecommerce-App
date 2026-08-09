@@ -1,11 +1,12 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from '../screens/home';
 import TabNavigator from './tabNavigator';
 import AppRoutes from '../utils/routes';
 import ProductsList from '../screens/products/productsList';
 import ProductDetail from '../screens/products/productDetail';
-import AddedToCartModal from '../components/modals/addedToCartModal';
+import Login from '../screens/auth/login';
+import Register from '../screens/auth/register';
+import CheckOut from '../screens/cart/checkOut';
 
 const RootNavigator: React.FC = () => {
   const Stack = createNativeStackNavigator();
@@ -24,6 +25,9 @@ const RootNavigator: React.FC = () => {
     headerShown:false
     }}  
       name={AppRoutes.PRODUCTDETAIL} component={ProductDetail}/>
+      <Stack.Screen name={AppRoutes.LOGIN} component={Login}/>
+      <Stack.Screen name={AppRoutes.REGISTER} component={Register}/>
+      <Stack.Screen name={AppRoutes.CHECKOUT} component={CheckOut}/>
     </Stack.Navigator>
   );
 };

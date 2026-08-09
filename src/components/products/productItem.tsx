@@ -5,43 +5,56 @@ import AppColors from '../../theme/colors';
 import { Add, Heart } from 'iconsax-react-nativejs';
 import { windowHeight, windowWidth } from '../../utils/constants';
 import AppRoutes from '../../utils/routes';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
 import { addToCart } from '../../store/slice/cartSlice';
+import { addToFavorite } from '../../store/slice/favoriteSlice';
+import { openModal } from '../../store/slice/authSlice';
 
-const ProductItem: React.FC<Props> = ({ product,type }) => {
+const ProductItem: React.FC<Props> = ({ product, type }) => {
   const navigation = useNavigation();
-  const dispatch:AppDispatch=useDispatch()
+  const { favorites } = useSelector((state: RootState) => state.favorites)
+  const { isLogin } = useSelector((state: RootState) => state.auth)
+  const isFavorite = favorites.find((item) => item.id == product.id)
+  const dispatch: AppDispatch = useDispatch()
+    const handleAddToFavorites = () => {
+      if (isLogin)
+        dispatch(addToFavorite(product))
+      else
+        dispatch(openModal())
+    }
   return (
     <Pressable
-      onPress={() => navigation.navigate(AppRoutes.PRODUCTDETAIL,{product})}
+      onPress={() => navigation.navigate(AppRoutes.PRODUCTDETAIL, { product })}
       style={styles.container}
     >
-      <Pressable style={{ position: 'absolute', right: 5, top: 5, zIndex: 99 }}>
-        <Heart color="red" size={30} variant="Bold" />
-      </Pressable>
+      <TouchableOpacity 
+      onPress={handleAddToFavorites}
+      style={{ position: 'absolute', right: 5, top: 5, zIndex: 99 }}>
+        <Heart color={isFavorite ? AppColors.RED : AppColors.GRAY} size={30} variant="Bold" />
+      </TouchableOpacity>
       <Image style={styles.image} source={{ uri: product.image }} />
-      <View style={{ padding: 10, flex: 1,flexDirection:"row",justifyContent:"space-between" ,alignItems:"center"}}>
-      <View>
+      <View style={{ padding: 10, flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <View>
           <Text style={styles.title} numberOfLines={1}>
-          {product.name}
-        </Text>
-        <Text style={styles.price}>${product.price}</Text>
-      </View>
-{   type=="list" &&   <View>
-        <TouchableOpacity
-        onPress={()=>dispatch(addToCart(product))}
-        style={{
-          backgroundColor:AppColors.PRIMARY,
-          borderRadius:100,
-          padding:1,
-          justifyContent:"center",
-          alignItems:"center"
-        }}
-        >
-          <Add color='white' size={30}/>
-        </TouchableOpacity>
-      </View>}
+            {product.name}
+          </Text>
+          <Text style={styles.price}>${product.price}</Text>
+        </View>
+        {type == "list" && <View>
+          <TouchableOpacity
+            onPress={() => dispatch(addToCart(product))}
+            style={{
+              backgroundColor: AppColors.PRIMARY,
+              borderRadius: 100,
+              padding: 1,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Add color='white' size={30} />
+          </TouchableOpacity>
+        </View>}
       </View>
     </Pressable>
   );
@@ -60,8 +73,8 @@ const styles = StyleSheet.create({
     width: windowWidth / 2 - 20,
     height: windowHeight * 0.2,
     resizeMode: 'cover',
-    borderTopLeftRadius:10,
-    borderTopRightRadius:10
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10
   },
   title: {
     color: AppColors.BLACK,

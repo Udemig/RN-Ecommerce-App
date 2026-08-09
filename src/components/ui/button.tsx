@@ -7,10 +7,10 @@ import AppColors from '../../theme/colors';
 type Props = RouteType<'button'>;
 
 const Button: React.FC<Props> = (props) => {
-const { type, title, icon,color }=props
+  const { type, title, icon, color } = props
   if (type == 'fullFiled')
     return (
-      <TouchableOpacity {...props} style={[styles.fullFiledContainer,{backgroundColor:color?color:AppColors.PRIMARY}]}>
+      <TouchableOpacity {...props} style={[styles.fullFiledContainer, { backgroundColor: color ? color : AppColors.PRIMARY }]}>
         <Text
           style={{ fontSize: 21, color: AppColors.WHITE, fontWeight: '700' }}
         >
@@ -24,6 +24,22 @@ const { type, title, icon,color }=props
         {icon}
       </TouchableOpacity>
     );
+  else if (type == "outline")
+    return <TouchableOpacity  {...props} style={styles.outlineButtonContainer}>
+      <Text
+        style={{ fontSize: 21, color: AppColors.RED, fontWeight: '500' }}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
+     else if (type == "linear")
+    return <TouchableOpacity  {...props} style={styles.linearButtonContainer}>
+      <Text
+        style={{ fontSize: 21, color: AppColors.BLACK, fontWeight: '500' }}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
 };
 
 const styles = StyleSheet.create({
@@ -32,6 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 100,
     paddingVertical: 15,
+    marginVertical:10
   },
   iconButtonContainer: {
     backgroundColor: AppColors.SOFTGRAY,
@@ -42,6 +59,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: AppColors.GRAY,
   },
+  outlineButtonContainer:{
+    justifyContent:"center",
+    alignItems:"center",
+    marginVertical:20
+  },
+  linearButtonContainer:{
+    backgroundColor: AppColors.SOFTGRAY,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: AppColors.GRAY,
+    marginVertical:5
+
+  }
 });
 
 export default Button;

@@ -4,7 +4,9 @@ enum AppColors {
     WHITE="#FFFFFF",
     BLACK="#000000",
     SOFTGRAY="#F8F7F7",
-    DELETE="#F65A5A"
+    DELETE="#F65A5A",
+    RED="red",
+    GREEN="#37d67a"
 }
 
 export default AppColors

@@ -17,15 +17,27 @@ import ProductSize from '../../components/products/productSize';
 import defaultScreenStyle from '../../styles/defaulScreenStyle';
 import AppColors from '../../theme/colors';
 import Button from '../../components/ui/button';
-import { AppDispatch } from '../../store/store';
-import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../store/slice/cartSlice';
+import { addToFavorite } from '../../store/slice/favoriteSlice';
+import { openModal } from '../../store/slice/authSlice';
 
 type Props = RouteType<'productDetail'>;
 
 const ProductDetail: React.FC<Props> = ({ navigation, route }) => {
-  const dispatch:AppDispatch=useDispatch()
+  const dispatch: AppDispatch = useDispatch()
+  const { favorites } = useSelector((state: RootState) => state.favorites)
+  const { isLogin } = useSelector((state: RootState) => state.auth)
   const { product } = route.params;
+  const isFavorite = favorites.find((item) => item.id == product.id)
+
+  const handleAddToFavorites = () => {
+    if (isLogin)
+      dispatch(addToFavorite(product))
+    else
+      dispatch(openModal())
+  }
   return (
     <View style={defaultScreenStyle.container}>
       <View
@@ -47,8 +59,10 @@ const ProductDetail: React.FC<Props> = ({ navigation, route }) => {
         >
           <ArrowLeft />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer}>
-          <Heart variant="Bold" color="#7C7979" />
+        <TouchableOpacity
+          onPress={handleAddToFavorites}
+          style={styles.buttonContainer}>
+          <Heart variant="Bold" color={isFavorite ? AppColors.RED : AppColors.GRAY} />
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={{ paddingBottom: windowHeight * 0.1 }}>
@@ -60,17 +74,17 @@ const ProductDetail: React.FC<Props> = ({ navigation, route }) => {
         </View>
       </ScrollView>
       <View
-        style={{ backgroundColor: AppColors.WHITE, height: windowHeight * 0.13,flexDirection:"row" }}
+        style={{ backgroundColor: AppColors.WHITE, height: windowHeight * 0.13, flexDirection: "row" }}
       >
-        <View style={{ flex: 2,padding:10,justifyContent:"center" }}>
-          <Button type="fullFiled" title="Buy Now"/>
+        <View style={{ flex: 2, padding: 10, justifyContent: "center" }}>
+          <Button type="fullFiled" title="Buy Now" />
         </View>
-        <View style={{ flex: 1,padding:10,justifyContent:"center"}}>
+        <View style={{ flex: 1, padding: 10, justifyContent: "center" }}>
           <Button
-          onPress={()=>dispatch(addToCart(product))}
-          icon={
-            <ShoppingCart size={30} variant='Bold' color={AppColors.GRAY}/>
-          } type="icon"/>
+            onPress={() => dispatch(addToCart(product))}
+            icon={
+              <ShoppingCart size={30} variant='Bold' color={AppColors.GRAY} />
+            } type="icon" />
         </View>
       </View>
     </View>

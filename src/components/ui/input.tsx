@@ -2,15 +2,20 @@ import React from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { RouteType } from '../routes/RouteType';
 import { SearchNormal } from 'iconsax-react-nativejs';
+import AppColors from '../../theme/colors';
 
 type Props = RouteType<'input'>;
 
-const Input: React.FC<Props> = ({ navigation, route }) => {
+const Input: React.FC<Props> = (props) => {
+  const {icon,label}=props
   return (
-    <View style={styles.container}>
-      <SearchNormal size={30} />
-      <TextInput style={styles.input} placeholder="Arama yapınız" />
+   <View>
+    {label&& <Text style={styles.label}>{label}</Text>}
+     <View style={styles.container}>
+     {icon}
+      <TextInput  {...props} style={styles.input} />
     </View>
+   </View>
   );
 };
 
@@ -19,11 +24,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F8F7F7',
-    margin: 10,
-    borderRadius: 100,
+    marginVertical: 5,
+    borderRadius: 10,
     padding: 10,
     paddingVertical:15,
-    paddingLeft:15
+    paddingLeft:15,
+    borderWidth:0.5,
+    borderColor:AppColors.GRAY,
   },
   input: {
     backgroundColor: '#F8F7F7',
@@ -31,6 +38,9 @@ const styles = StyleSheet.create({
     marginHorizontal:5,
     flex:1
   },
+  label:{
+fontSize:16
+  }
 });
 
 export default Input;

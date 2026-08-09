@@ -5,6 +5,7 @@ import WidgetHeader from './widgetHeader';
 import ProductItem from '../products/productItem';
 import Input from '../ui/input';
 import AppColors from '../../theme/colors';
+import { SearchNormal } from 'iconsax-react-nativejs';
 
 type Props = RouteType<'widget'>;
 
@@ -12,7 +13,7 @@ const Widget: React.FC<Props> = ({ title, data, widget }) => {
   if (widget.type == 'searchBar')
     return (
       <View style={{marginTop:15}}>
-        <Input />
+        <Input icon={<SearchNormal size={28}/>} placeholder='Arama yapınız'/>
       </View>
     );
   else if (widget.type == 'promotion')

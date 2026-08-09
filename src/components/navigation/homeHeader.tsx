@@ -1,16 +1,21 @@
 import React from 'react';
-import { SafeAreaView, Text, StyleSheet, View, Image } from 'react-native';
+import { SafeAreaView, Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { RouteType } from '../routes/RouteType';
-import { Notification } from 'iconsax-react-nativejs';
+import { Notification, SearchNormal } from 'iconsax-react-nativejs';
 import AppColors from '../../theme/colors';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 type Props = RouteType<'homeHeader'>;
 
 const HomeHeader: React.FC<Props> = ({ navigation, route }) => {
+  const {isLogin}=useSelector((state:RootState)=>state.auth)
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{flexDirection:"row",padding:10,justifyContent:"center"}}>
-        <View style={{flex:2,flexDirection:"row"}}>
+       {
+        isLogin &&  <View style={{flex:2,flexDirection:"row"}}>
           <View>
             <Image
             source={require("../../assets/images/profile.png")}
@@ -25,14 +30,19 @@ const HomeHeader: React.FC<Props> = ({ navigation, route }) => {
             }}>Merhaba!</Text>
             <Text style={{fontSize:18,
                 fontWeight:"600"
-            }}>Ahmet Kara</Text>
+            }}>Mark Adam</Text>
           </View>
         </View>
-        <View style={{flex:1,alignItems:"flex-end",justifyContent:"center"}}>
-            <View style={{backgroundColor:"#F8F7F7",justifyContent:"center",alignItems:"center",padding:10,borderRadius:100}}>
-            <Notification size={30} variant='Bold' color='#7C7979'/>
+       }
+        <View style={{flex:1,alignItems:"center",justifyContent:"flex-end",flexDirection:"row"}}>
+            <TouchableOpacity style={{backgroundColor:"#F8F7F7",justifyContent:"center",alignItems:"center",padding:10,borderRadius:100,marginHorizontal:10}}>
+            <Notification size={27}  color='#7C7979'/>
 
-            </View>
+            </TouchableOpacity>
+                <TouchableOpacity style={{backgroundColor:"#F8F7F7",justifyContent:"center",alignItems:"center",padding:10,borderRadius:100}}>
+            <SearchNormal size={27}  color='#7C7979'/>
+
+            </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
