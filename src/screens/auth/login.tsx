@@ -10,22 +10,13 @@ import AppRoutes from '../../utils/routes';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { login } from '../../store/slice/authSlice';
+import { Formik } from 'formik';
+import { LoginSchema } from '../../utils/formSchemas';
+import { loginUser } from '../../store/actions/authActions';
 
 // create a component
 const Login: React.FC = ({ navigation, route }) => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-     const dispatch:AppDispatch=useDispatch()
-    const handleLogin=()=>{
-        const userValues={
-            email,password
-        }
-        if(email && password)
-            dispatch(login(userValues))
-        else
-            Alert.alert("Lütfen tüm alanları doldurunuz")
-
-    }
+    const dispatch: AppDispatch = useDispatch()
     return (
         <View style={defaultScreenStyle.container}>
             <ScrollView contentContainerStyle={{
@@ -35,22 +26,49 @@ const Login: React.FC = ({ navigation, route }) => {
                     style={styles.image}
                     source={require("../../assets/images/login.jpg")}
                 />
-                <Input onChangeText={(value) => setEmail(value)} value={email} label="E-Posta" placeholder="E-posta adresinizi giriniz " />
-                <Input onChangeText={(value) => setPassword(value)} value={password} label="Şifre" placeholder="Şifrenizi giriniz " />
-                <View style={{
-                    marginTop: 30
-                }}>
-                    <Button onPress={handleLogin} type="fullFiled" title="Giriş Yap" />
-                    <Text style={{
-                        marginVertical: 20,
-                        textAlign: "center",
-                        fontSize: 16,
-                        color: AppColors.GRAY
-                    }}>Henüz hesabınızı oluşturmadınız mı?</Text>
-                    <Button
-                        onPress={() => navigation.navigate(AppRoutes.REGISTER)}
-                        type="linear" title="Kayıt Ol" />
-                </View>
+                <Formik
+                    initialValues={{
+                        "email": "Serhatustek3@gmail.com",
+                        "password": "12345678"
+                    }}
+                    onSubmit={(values) =>dispatch(loginUser(values))}
+                    validationSchema={LoginSchema}
+                >
+                    {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+                        <View>
+                            <Input
+                                error={errors.email}
+                                onChangeText={handleChange("email")}
+                                value={values.email}
+                                label="E-Posta"
+                                placeholder="E-posta adresinizi giriniz "
+                            />
+                            <Input
+                                error={errors.password}
+                                onChangeText={handleChange("password")}
+                                value={values.password}
+                                label="Şifre" placeholder="Şifrenizi giriniz "
+                            />
+                            <View style={{
+                                marginTop: 30
+                            }}>
+                                <Button onPress={handleSubmit}
+                                    type="fullFiled" title="Giriş Yap"
+                                />
+                                <Text style={{
+                                    marginVertical: 20,
+                                    textAlign: "center",
+                                    fontSize: 16,
+                                    color: AppColors.GRAY
+                                }}>Henüz hesabınızı oluşturmadınız mı?</Text>
+                                <Button
+                                    onPress={() => navigation.navigate(AppRoutes.REGISTER)}
+                                    type="linear" title="Kayıt Ol" />
+                            </View>
+                        </View>
+                    )}
+                </Formik>
+
             </ScrollView>
         </View>
     );

@@ -10,7 +10,7 @@ const ProductInfo: React.FC<Props> = ({ product }) => {
   return (
     <View style={styles.container}>
       <View style={{ flex: 2 }}>
-        <Text style={{ fontSize: 21, fontWeight: '700' }}>{product.name}</Text>
+        <Text style={{ fontSize: 21, fontWeight: '700' }}>{product?.title}</Text>
         <View
           style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}
         >
@@ -24,7 +24,7 @@ const ProductInfo: React.FC<Props> = ({ product }) => {
         <Text
           style={{ fontSize: 21, fontWeight: '700', color: AppColors.PRIMARY }}
         >
-          ${product.price}
+          ${product?.price}
         </Text>
       </View>
     </View>

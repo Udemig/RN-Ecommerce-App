@@ -1,18 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
+import { registerUser } from "../actions/authActions";
+import { AuthState } from "../../model/data/authState";
 
-const initialState = {
+const initialState:AuthState = {
     isLogin: false,
     visible: false,
     accounts: [],
-    logOutModalVisible: false
+    logOutModalVisible: false,
+    pendingRegister: false,
+    error:null,
+    registerModalVisible:false,
+    registerStatus:null
 }
 const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {
         closeModal: (state) => {
-            state.visible = false
+            state.visible = false,
+            state.registerModalVisible=false
         },
         openModal: (state) => {
             state.visible = true
@@ -37,7 +44,24 @@ const authSlice = createSlice({
             state.isLogin = false
         }
 
-    }
+    },
+    extraReducers(builder) {
+        builder
+            .addCase(registerUser.pending, (state, action) => {
+                state.pendingRegister = true
+            })
+            .addCase(registerUser.fulfilled, (state, action) => {
+                state.pendingRegister = false,
+                state.registerStatus=true,
+                  state.registerModalVisible=true
+            }).
+            addCase(registerUser.rejected, (state, action) => {
+                state.pendingRegister = false
+                state.error=action.payload,
+                state.registerModalVisible=true,
+                state.registerStatus=false
+            })
+    },
 })
 export const {
     closeModal,

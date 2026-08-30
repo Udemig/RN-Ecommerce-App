@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { RouteType } from '../routes/RouteType';
 import { ShoppingCart } from 'iconsax-react-nativejs';
 import AppColors from '../../theme/colors';
@@ -7,14 +7,14 @@ import AppColors from '../../theme/colors';
 type Props = RouteType<'button'>;
 
 const Button: React.FC<Props> = (props) => {
-  const { type, title, icon, color } = props
+  const { type, title, icon, color ,disabled} = props
   if (type == 'fullFiled')
     return (
-      <TouchableOpacity {...props} style={[styles.fullFiledContainer, { backgroundColor: color ? color : AppColors.PRIMARY }]}>
+      <TouchableOpacity {...props} style={[styles.fullFiledContainer, { backgroundColor: disabled?AppColors.GRAY:(color ? color : AppColors.PRIMARY )}]}>
         <Text
           style={{ fontSize: 21, color: AppColors.WHITE, fontWeight: '700' }}
         >
-          {title}
+          {disabled?<ActivityIndicator size={"small"} color={AppColors.WHITE}/>: title}
         </Text>
       </TouchableOpacity>
     );

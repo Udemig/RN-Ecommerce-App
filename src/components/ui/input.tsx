@@ -7,7 +7,7 @@ import AppColors from '../../theme/colors';
 type Props = RouteType<'input'>;
 
 const Input: React.FC<Props> = (props) => {
-  const {icon,label}=props
+  const {icon,label,error}=props
   return (
    <View>
     {label&& <Text style={styles.label}>{label}</Text>}
@@ -15,6 +15,7 @@ const Input: React.FC<Props> = (props) => {
      {icon}
       <TextInput  {...props} style={styles.input} />
     </View>
+    {error && <Text style={styles.error}>{error}</Text>}
    </View>
   );
 };
@@ -40,6 +41,10 @@ const styles = StyleSheet.create({
   },
   label:{
 fontSize:16
+  },
+  error:{
+    color:AppColors.DELETE,
+      marginVertical:10
   }
 });
 

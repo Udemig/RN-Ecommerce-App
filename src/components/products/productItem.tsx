@@ -10,8 +10,9 @@ import { AppDispatch, RootState } from '../../store/store';
 import { addToCart } from '../../store/slice/cartSlice';
 import { addToFavorite } from '../../store/slice/favoriteSlice';
 import { openModal } from '../../store/slice/authSlice';
+import { ProductItemProps } from '../../model/ui/productItemProps';
 
-const ProductItem: React.FC<Props> = ({ product, type }) => {
+const ProductItem: React.FC<ProductItemProps> = ({ product, type }) => {
   const navigation = useNavigation();
   const { favorites } = useSelector((state: RootState) => state.favorites)
   const { isLogin } = useSelector((state: RootState) => state.auth)
@@ -25,7 +26,7 @@ const ProductItem: React.FC<Props> = ({ product, type }) => {
     }
   return (
     <Pressable
-      onPress={() => navigation.navigate(AppRoutes.PRODUCTDETAIL, { product })}
+      onPress={() => navigation.navigate(AppRoutes.PRODUCTDETAIL, {productId:product.id })}
       style={styles.container}
     >
       <TouchableOpacity 
@@ -33,15 +34,19 @@ const ProductItem: React.FC<Props> = ({ product, type }) => {
       style={{ position: 'absolute', right: 5, top: 5, zIndex: 99 }}>
         <Heart color={isFavorite ? AppColors.RED : AppColors.GRAY} size={30} variant="Bold" />
       </TouchableOpacity>
-      <Image style={styles.image} source={{ uri: product.image }} />
-      <View style={{ padding: 10, flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <View>
-          <Text style={styles.title} numberOfLines={1}>
-            {product.name}
+      <Image style={styles.image} source={{ uri: product?.images[0]}} />
+      <View style={{ padding: 10}}>
+        <View >
+          <Text  style={styles.title} numberOfLines={2}>
+            {product.title}
           </Text>
-          <Text style={styles.price}>${product.price}</Text>
         </View>
-        {type == "list" && <View>
+        {type == "list" && 
+        <View style={{flexDirection:"row",
+          justifyContent:"space-between",
+          alignItems:"center"
+        }}>
+          <Text style={styles.price}>${product.price}</Text>
           <TouchableOpacity
             onPress={() => dispatch(addToCart(product))}
             style={{
@@ -62,15 +67,14 @@ const ProductItem: React.FC<Props> = ({ product, type }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: windowWidth / 2 - 20,
-    height: windowHeight * 0.3,
+    width: windowWidth / 2-20,
     backgroundColor: '#F8F7F7',
     borderRadius: 10,
     justifyContent: 'center',
     margin: 5,
   },
   image: {
-    width: windowWidth / 2 - 20,
+    width: windowWidth / 2-20,
     height: windowHeight * 0.2,
     resizeMode: 'cover',
     borderTopLeftRadius: 10,
@@ -80,7 +84,7 @@ const styles = StyleSheet.create({
     color: AppColors.BLACK,
     fontWeight: '700',
     marginVertical: 10,
-    fontSize: 16,
+    fontSize: 14,
   },
   price: {
     color: AppColors.PRIMARY,

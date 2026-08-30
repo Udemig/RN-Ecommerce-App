@@ -4,6 +4,7 @@ import AppColors from "../theme/colors";
 const defaultScreenStyle=StyleSheet.create({
     safeArea:{
         flex:1,
+          backgroundColor:AppColors.WHITE,
     },
     container:{
         flex:1,

@@ -27,7 +27,7 @@ const ProductSize: React.FC<Props> = ({ product }) => {
             margin:5
           }}
         >
-          <Text style={{ fontSize: 18, fontWeight: '700' }}>{item.size}</Text>
+          <Text style={{ fontSize: 18, fontWeight: '700' }}>{item?.size}</Text>
         </View>
       ))}
     </View>

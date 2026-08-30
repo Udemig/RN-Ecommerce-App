@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -8,7 +8,6 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { RouteType } from '../routes/RouteType';
 import { windowHeight, windowWidth } from '../../utils/constants';
 import { ArrowLeft, Heart, ShoppingCart } from 'iconsax-react-nativejs';
 import ProductInfo from '../../components/products/productInfo';
@@ -22,14 +21,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../store/slice/cartSlice';
 import { addToFavorite } from '../../store/slice/favoriteSlice';
 import { openModal } from '../../store/slice/authSlice';
+import { getSingleProduct } from '../../store/actions/productsActions';
+import Spinner from '../../components/ui/spinner';
 
-type Props = RouteType<'productDetail'>;
 
 const ProductDetail: React.FC<Props> = ({ navigation, route }) => {
   const dispatch: AppDispatch = useDispatch()
   const { favorites } = useSelector((state: RootState) => state.favorites)
   const { isLogin } = useSelector((state: RootState) => state.auth)
-  const { product } = route.params;
+  const { product ,detailPending} = useSelector((state: RootState) => state.products)
+  const { productId } = route.params;
   const isFavorite = favorites.find((item) => item.id == product.id)
 
   const handleAddToFavorites = () => {
@@ -38,8 +39,15 @@ const ProductDetail: React.FC<Props> = ({ navigation, route }) => {
     else
       dispatch(openModal())
   }
+  useEffect(() => {
+ dispatch(getSingleProduct({
+  id:productId,
+  params:{}
+ }))
+  }, [])
+   if(detailPending) return <Spinner/>
   return (
-    <View style={defaultScreenStyle.container}>
+    <View style={defaultScreenStyle.safeArea}>
       <View
         style={{
           flexDirection: 'row',
@@ -66,11 +74,10 @@ const ProductDetail: React.FC<Props> = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={{ paddingBottom: windowHeight * 0.1 }}>
-        <Image style={styles.image} source={{ uri: product.image }} />
+        <Image style={styles.image} source={{ uri: product?.images[0] }} />
         <View style={{ paddingHorizontal: 15, marginTop: 20 }}>
           <ProductInfo product={product} />
           <ProductDesciption product={product} />
-          <ProductSize product={product} />
         </View>
       </ScrollView>
       <View

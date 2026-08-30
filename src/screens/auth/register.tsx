@@ -7,43 +7,20 @@ import Input from '../../components/ui/input';
 import Button from '../../components/ui/button';
 import AppColors from '../../theme/colors';
 import AppRoutes from '../../utils/routes';
-import { AppDispatch } from '../../store/store';
-import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../store/slice/authSlice';
-
+import {
+    Formik,
+} from 'formik';
+import { RegisterSchema } from '../../utils/formSchemas';
+import { registerUser } from '../../store/actions/authActions';
 // create a component
 const Register: React.FC = ({ navigation, route }) => {
-    const [name, setName] = useState("")
-    const [surname, setSurname] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const dispatch:AppDispatch=useDispatch()
-    const handleRegister=()=>{
-        const userValues={
-            name,
-            surname,
-            email,
-            password
-        }
-        console.log(userValues)
-        if(name &&surname &&email &&password )
-     {
-               dispatch(register(userValues))
-              Alert.alert('Kayıt Olma', 'Kayıt başarılı', [
-      {
-        text: 'Giriş Yap',
-        onPress: () => navigation.navigate(AppRoutes.LOGIN
-        ),
-      },
-      {
-        text: 'Vazgeç',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-    ]);
-     }
-        else
-            Alert.alert("Lütfen tüm bilgileri doldurunuz")
+    const dispatch: AppDispatch = useDispatch()
+    const { pendingRegister } = useSelector((state: RootState) => state.auth)
+    const handleRegister = () => {
+
     }
     return (
         <View style={defaultScreenStyle.container}>
@@ -54,17 +31,64 @@ const Register: React.FC = ({ navigation, route }) => {
                     style={styles.image}
                     source={require("../../assets/images/login.jpg")}
                 />
-                <Input onChangeText={(value)=>setName(value)} value={name} label="Ad" placeholder="Adınızı giriniz " />
-                <Input onChangeText={(value)=>setSurname(value)} value={surname} label="Soyad" placeholder="Soyadınızı giriniz " />
-                <Input onChangeText={(value)=>setEmail(value)} value={email} label="E-Posta" placeholder="E-posta adresinizi giriniz " />
-                <Input onChangeText={(value)=>setPassword(value)} value={password} label="Şifre" placeholder="Şifrenizi giriniz " />
-                <View style={{
-                    marginTop: 30
-                }}>
-                    <Button
-                    onPress={handleRegister}
-                    type="fullFiled" title="Kayıt Ol" />
-                </View>
+                <Formik
+                    initialValues={{
+                        "name": "",
+                        "email": "",
+                        "password": "",
+                        "rePassword": "",
+                        "phone": null
+
+                    }}
+                    validationSchema={RegisterSchema}
+                    onSubmit={values => dispatch(registerUser(values))}
+                >
+                    {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+                        <View>
+                            <Input
+                                error={errors.name}
+                                onChangeText={handleChange("name")}
+                                value={values.name}
+                                label="Ad ve Soyadı"
+                                placeholder="Adınızı ve soyadınızı giriniz "
+                            />
+                            <Input
+                                error={errors.email}
+                                onChangeText={handleChange("email")}
+                                value={values.email}
+                                label="E-Posta"
+                                placeholder="E-posta adresinizi giriniz "
+                            />
+                            <Input
+                                error={errors.password}
+                                onChangeText={handleChange("password")}
+                                value={values.password}
+                                label="Şifre" placeholder="Şifrenizi giriniz "
+                            />
+                               <Input
+                                error={errors.rePassword}
+                                onChangeText={handleChange("rePassword")}
+                                value={values.rePassword}
+                                label="Şifre Tekrar" placeholder="Şifrenizi giriniz "
+                            />
+                               <Input
+                                error={errors.phone}
+                                onChangeText={handleChange("phone")}
+                                value={values.phone}
+                                label="Telefon Numarası" placeholder="Telefon numarabnızı giriniz "
+                            />
+                            <View style={{
+                                marginTop: 30
+                            }}>
+                                <Button
+                                    disabled={pendingRegister}
+                                    onPress={handleSubmit}
+                                    type="fullFiled" title="Kayıt Ol" />
+                            </View>
+                        </View>
+                    )}
+                </Formik>
+
             </ScrollView>
         </View>
     );

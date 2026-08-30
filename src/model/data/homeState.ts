@@ -2,6 +2,7 @@ interface Widget {
   id: number;
   title: string;
   type: string;
+  slug:"bestSeller" | "bestOffer" | "populer"
 }
 
 interface HomeState {

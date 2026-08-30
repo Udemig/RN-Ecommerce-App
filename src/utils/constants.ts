@@ -32,4 +32,9 @@ const ProfileMenu = [
     },
 ];
 
-export { windowHeight, windowWidth, ProfileMenu }
+enum ErrorsMessages{
+    SERVER_ERROR="Şuanda hizmet sağlayamıyoruz.Lütfen daha sonra tekrar deneyiniz.",
+    ACCOUNTS_ALREADY_EXIST="Bu hesap zaten kayıtlı lütfen farklı bir email adresi ile tekrar deneyiniz.",
+    PHONE_FORMAT_ERROR="Telefon numarası formatı hatalı",
+}
+export { windowHeight, windowWidth, ProfileMenu ,ErrorsMessages}

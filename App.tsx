@@ -6,6 +6,7 @@ import { store } from './src/store/store';
 import AddedToCartModal from './src/components/modals/addedToCartModal';
 import UserCheckModal from './src/components/modals/userCheckModal';
 import UserLogOutModal from './src/components/modals/userLogOutModal';
+import RegisterModal from './src/components/modals/registerModal';
 const App: React.FC = () => {
   return (
     <Provider store={store}>
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <AddedToCartModal />
         <UserCheckModal />
         <UserLogOutModal />
+        <RegisterModal/>
       </NavigationContainer>
     </Provider>
   );
